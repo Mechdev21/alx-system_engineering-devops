@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#bash script for while if loop
+
+x=1
+while [ $x -le 10 ]
+do
+    if [ $x -eq 4 ]
+    then
+        echo "bad luck"
+        x=$((x+1))
+    elif [ $x -eq 8 ]
+    then
+        echo "good luck"
+        x=$((x+1))
+    else
+        echo "Best School"
+        x=$((x+1))
+    fi
+done
+
