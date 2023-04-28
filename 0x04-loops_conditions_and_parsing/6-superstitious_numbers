@@ -2,8 +2,7 @@
 # Trying out the case statement
 
 x=1
-max=20
-while [ $x -le $max ]
+while [ $x -le 20 ]
 do
     echo $x
     case $x in
@@ -16,8 +15,6 @@ do
         17)
             echo "bad luck from Italy"
             ;;
-        *)
-        ;;
     esac
     ((x++))
 done
