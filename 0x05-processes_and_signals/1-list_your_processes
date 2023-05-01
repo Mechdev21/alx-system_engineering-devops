@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #view all running process
 
-ps -aux
+ps -a -x -u -f
