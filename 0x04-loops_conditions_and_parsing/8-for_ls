@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-#prints the cwd
+# displays the content of the current working directory.
 
-ls>list
-
-for i in $(cat list); do
-	echo "$i"
+for i in *
+do
+    echo "$i" | cut -d'-' -f2
 done
