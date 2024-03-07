@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#prints the cwd
+
+ls>list
+
+for i in $(cat list); do
+	echo "$i"
+done
