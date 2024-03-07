@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-#shell script trying out for loop
-
-for((i=0;i<10;i++))
-do
-    echo "Best School"
-done
-
