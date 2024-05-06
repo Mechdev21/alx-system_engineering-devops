@@ -1,0 +1,4 @@
+PasswordAuthentication no
+AcceptEnv LANG LC_*
+IdentityFile ~/.ssh/school
+
