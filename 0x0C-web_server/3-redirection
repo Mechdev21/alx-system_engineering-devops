@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#configur nginx server
+
+apt-get update
+apt-get install -y nginx
+echo "Hello World!" > /etc/nginx/html/index.html
+echo "server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /etc/nginx/html;
+        index index.html;
+
+        location / {
+                return 301 https://twitter.com/home;
+        }
+}" > /etc/nginx/sites-available/default
+service nginx restart
