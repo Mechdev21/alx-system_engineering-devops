@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#debugging of nginx
+
+if command -v nginx > /dev/null 2>&1; then
+    echo "nginx is installed"
+else
+    echo "installing nginx now"
+    apt-get update
+    apt-get install -y nginx
+fi
+
+nginx_status = $(service nginx status)
+
+if [[ $nginx_status == *"not"* ]]; then
+    service nginx start
+fi
