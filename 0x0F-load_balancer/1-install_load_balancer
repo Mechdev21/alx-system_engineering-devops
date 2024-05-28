@@ -13,8 +13,8 @@ frontend devslink.tech
 
 backend web_backend
     balance roundrobin
-    server 199820-web-01 54.210.78.58:80 check
-    server 199820-web-02 52.86.177.174:80 check
+    server web-01 54.210.78.58:80 check
+    server web-02 52.86.177.174:80 check
 " > /etc/haproxy/haproxy.cfg
 
 service haproxy restart
