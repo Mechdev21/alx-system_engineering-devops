@@ -1,4 +1,5 @@
-tom http header response NGiNX
+#!/usr/bin/env bash
+#configuratio http header response NGiNX
 exec {'update':
   command => '/usr/bin/apt-get update',
 }
