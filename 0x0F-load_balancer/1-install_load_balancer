@@ -1,16 +1,20 @@
- a new Ubuntu machine nginx
-apt-get update
-apt-get install software-properties-common -y
-add-apt-repository ppa:vbernat/haproxy-1.7 -y
-apt-get update
-apt-get install haproxy=1.7.\* -y
-echo "frontend web-front
-        bind *:80
-        default_backend web-backend
+#!/usr/bin/env bash
+# intaliing and configuring haproxy
 
-backend web-backend
-        balance roundrobin
-        server web1 35.227.47.184:80 check
-        server web2 35.190.188.208:80 check
-" | sudo tee -a /etc/haproxy/haproxy.cfg
-sudo service haproxy start
+apt-get -y update
+apt-get -y install --no-install-recommends software-properties-common
+add-apt-repository -y ppa:vbernat/haproxy-2.2
+apt-get install -y haproxy=2.2.\*
+
+echo "
+frontend devslink.tech
+    bind *:80
+    default_backend web_backend
+
+backend web_backend
+    balance roundrobin
+    server 199820-web-01 54.210.78.58:80 check
+    server 199820-web-02 52.86.177.174:80 check
+" > /etc/haproxy/haproxy.cfg
+
+service haproxy restart
