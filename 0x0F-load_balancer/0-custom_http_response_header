@@ -1,20 +1,11 @@
 #!/usr/bin/env bash
 # Configuring my nginx server
 
-# Update package list and install Nginx
 apt-get update
 apt-get install nginx -y
-
-# Create the directory for HTML files
 mkdir -p /etc/nginx/html
-
-# Create a simple "Hello World!" index page
 echo "Hello World!" > /etc/nginx/html/index.html
-
-# Create a custom 404 error page
 echo "Ceci n'est pas une page" > /etc/nginx/html/404.html
-
-# Write the Nginx server configuration
 echo "server {
     listen 80;
     listen [::]:80 default_server;
@@ -34,13 +25,5 @@ echo "server {
         internal;
     }
 }" > /etc/nginx/sites-available/default
-
-# Symlink to enable the site
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-
-# Test Nginx configuration for syntax errors
-nginx -t
-
-# Restart Nginx to apply the changes
 service nginx restart
-
