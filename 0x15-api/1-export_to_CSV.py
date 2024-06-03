@@ -1,63 +1,47 @@
 #!/usr/bin/python3
-"""
-place holder
-"""
+"""Python script to export data in the CSV format"""
+
 import csv
-import json
 import requests
 import sys
 
-def get_employee(argument):
-    base_url = f"https://jsonplaceholder.typicode.com"
-    user_url = f"{base_url}/users/{argument}"
-    todo_url = f"{base_url}/users/{argument}/todos"
+base_url = 'https://jsonplaceholder.typicode.com/'
 
+
+def do_request():
+    '''Performs request'''
+
+    if not len(sys.argv):
+        return print('USAGE:', __file__, '<employee id>')
+    eid = sys.argv[1]
     try:
-        user_response = requests.get(user_url)
-        user_response.raise_for_status()
-    except requests.exceptions.HTTPError:
-        print(f"User with ID {argument} not found.")
-        return
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return
+        _eid = int(sys.argv[1])
+    except ValueError:
+        return print('Employee id must be an integer')
 
-    user_data = user_response.json()
-    employee_name = user_data.get('name')
+    response = requests.get(base_url + 'users/' + eid)
+    if response.status_code == 404:
+        return print('User id not found')
+    elif response.status_code != 200:
+        return print('Error: status_code:', response.status_code)
+    user = response.json()
 
-    try:
-        todo_response = requests.get(todo_url)
-        todo_response.raise_for_status()
-    except requests.exceptions.HTTPError:
-        print("Could not retrieve todos.")
-        return
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return
+    response = requests.get(base_url + 'todos/')
+    if response.status_code != 200:
+        return print('Error: status_code:', response.status_code)
+    todos = response.json()
+    user_todos = [todo for todo in todos
+                  if todo.get('userId') == user.get('id')]
+    completed = [todo for todo in user_todos if todo.get('completed')]
 
-    todo_data = todo_response.json()
-    done_tasks = [todo for todo in todo_data if todo.get('completed')]
-    total_tasks = len(todo_data)
-    num_done_tasks = len(done_tasks)
+    with open(eid + '.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile, lineterminator='\n',
+                            quoting=csv.QUOTE_ALL)
+        [writer.writerow(['{}'.format(field) for field in
+                          (todo.get('userId'), user.get('username'),
+                           todo.get('completed'), todo.get('title'))])
+         for todo in user_todos]
 
-    csv_filename = f"{argument}.csv"
-
-    with open(csv_filename, mode='w', newline='') as file:
-        writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-        writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
-
-        for task in todo_data:
-            writer.writerow([argument, employee_name, task.get('completed'), task.get('title')])
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: script.py <employee_id>")
-        sys.exit(1)
-
-    try:
-        argument = int(sys.argv[1])
-    except ValueError:
-        print("Please provide a valid employee ID.")
-        sys.exit(1)
-
-    get_employee(argument)
+    do_request()
